@@ -20,6 +20,7 @@ function formartCurrencyBRL(value){
 form.addEventListener("submit",(event)=>{
     event.preventDefault();
 
+    selectedIndex = category.options.selectedIndex;
     const newExpense = {
         idExpense : new Date().getTime(),
         expense: expense.value,
@@ -28,4 +29,10 @@ form.addEventListener("submit",(event)=>{
         amount: amount.value,
         created_at: new Date()
     }
+
+    expenseAdd(newExpense)
 })
+
+function expenseAdd(newExpense){
+    alert("oi");
+}
