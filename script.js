@@ -77,21 +77,7 @@ function expenseAdd(newExpense){
 
         expenseItem.appendChild(expenseRemove);
 
-        const requests = document.querySelector("header span");
-        let numberRequests = expenseList.querySelectorAll("li").length;
-        
-        requests.textContent = `${numberRequests} solicitações`;
-
-        const amountRequests = document.querySelectorAll(".expense-amount");
-        let sumAmount = 0;
-        for(i = 0; i < numberRequests; i++){
-            let amountValue = formartAmount(amountRequests[i].textContent);
-            sumAmount += amountValue;
-        }
-        
-        const totalAmount = document.querySelector("header h2");
-
-        totalAmount.innerHTML = `<small>R$</small> ${formartCurrencyBRL(sumAmount)}`;
+        calculateAmount();
     }catch(e){
         alert("Não foi possivel concluir a operação")
     }
@@ -104,8 +90,37 @@ function formartAmount(value){
     return Number(value);
 }
 
-const removeIcon = document.querySelector(".remove-icon");
-
-removeIcon.addEventListener("click",(event)=>{
-    alert("remover");
+expenseList.addEventListener("click",(event)=>{
+    if(event.target.classList.contains("remove-icon")){
+        const item = event.target.closest("li");
+        item.remove();
+        calculateAmount();
+    }
 })
+
+function calculateAmount(){
+        try{
+        const requests = document.querySelector("header span");
+        let numberRequests = expenseList.querySelectorAll("li").length;
+        const totalAmount = document.querySelector("header h2");
+        if(numberRequests > 0)
+        {
+            requests.textContent = `${numberRequests} solicitações`;
+
+            const amountRequests = document.querySelectorAll(".expense-amount");
+            let sumAmount = 0;
+            for(i = 0; i < numberRequests; i++){
+                let amountValue = formartAmount(amountRequests[i].textContent);
+                sumAmount += amountValue;
+            }
+            
+            const totalAmount = document.querySelector("header h2");
+            totalAmount.innerHTML = `<small>R$</small> ${formartCurrencyBRL(sumAmount)}`;
+        }else{
+            requests.textContent = "0 solicitações";
+            totalAmount.innerHTML =`<small>R$</small> ${formartCurrencyBRL(0)}`;
+        }
+    }catch(e){
+        alert(e);
+    }
+}
